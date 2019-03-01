@@ -25,12 +25,29 @@ class SecurityController extends AbstractController
     /**
      * @Route("/Regist", name="add")
      */
-    public function addToDataBase(UserPasswordEncoderInterface $encoder){
+    public function addToDataBase(UserPasswordEncoderInterface $encoder, Request $request){
 
         $user = new User();
 
         $form = $this->createForm(RegistrationFormType::class, $user, [
         ]);
+
+        $request = Request::createFromGlobals();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            $userPas = $user->getPassword();
+            $user->setPassword($encoder->encodePassword($user, $userPas));
+
+            $em->persist($user);
+            $em->flush();
+
+            return $this->redirectToRoute('login');
+        }
 
         return $this->render('security/regist.html.twig', [
             'post_form' => $form->createView()
