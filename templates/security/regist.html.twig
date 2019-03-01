@@ -2,4 +2,9 @@
 
 {{ form(post_form) }}
 
+{% if error %}
+
+    <p style="color: red;"> Что-то пошло не так. Проверьте ваш пароль</p>
+
+{% endif %}
 <a href="/">Home</a>

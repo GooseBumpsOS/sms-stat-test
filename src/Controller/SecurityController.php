@@ -2,6 +2,7 @@
 namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Services\Validation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/Regist", name="add")
      */
-    public function addToDataBase(UserPasswordEncoderInterface $encoder, Request $request){
+    public function addToDataBase(UserPasswordEncoderInterface $encoder, Request $request, Validation $valid){
 
         $user = new User();
 
@@ -41,16 +42,28 @@ class SecurityController extends AbstractController
             $em = $this->getDoctrine()->getManager();
 
             $userPas = $user->getPassword();
+
+
+            if(!$valid->validate($userPas)) { //проверка пароля на валидность
+
+                return $this->render('security/regist.html.twig', [
+                    'post_form' => $form->createView(),
+                    'error' => true
+                ]);
+
+            }
+
             $user->setPassword($encoder->encodePassword($user, $userPas));
 
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('login');
+           // return $this->redirectToRoute('login');
         }
 
         return $this->render('security/regist.html.twig', [
-            'post_form' => $form->createView()
+            'post_form' => $form->createView(),
+            'error' => false
         ]);
 
 
