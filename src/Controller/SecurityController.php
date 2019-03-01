@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use App\Entity\User;
+use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,16 +23,21 @@ class SecurityController extends AbstractController
         ]);
     }
     /**
-     * @Route("/add", name="add")
+     * @Route("/Regist", name="add")
      */
     public function addToDataBase(UserPasswordEncoderInterface $encoder){
+
         $user = new User();
-        $user->setUsername('two');
-        $user->setPassword($encoder->encodePassword($user, '0000'));
-        $user->setEmail('two2@mail.com');
-        $this->getDoctrine()->getManager()->persist($user);
-        $this->getDoctrine()->getManager()->flush();
-        return new JsonResponse('Ok');
+
+        $form = $this->createForm(RegistrationFormType::class, $user, [
+        ]);
+
+        return $this->render('security/regist.html.twig', [
+            'post_form' => $form->createView()
+        ]);
+
+
+
     }
     /**
      * @Route("/logout", name="logout")
