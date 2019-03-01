@@ -25,7 +25,8 @@ security:
                 path: /logout
                 target: /
     # Easy way to control access for large sections of your site
+    #ROLE_USER
+    #IS_AUTHENTICATED_ANONYMOUSLY
     # Note: Only the *first* access control that matches will be used
-#    access_control:
-#        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: ^/, roles: ROLE_USER }
+    access_control:
+        - { path: ^/table, roles: IS_AUTHENTICATED_FULLY }

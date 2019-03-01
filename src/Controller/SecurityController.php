@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controller;
+
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Services\Validation;
@@ -58,7 +60,7 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-           // return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('security/regist.html.twig', [
