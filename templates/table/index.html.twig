@@ -13,13 +13,22 @@
         <th>Доставлено в %</th>
 
     </tr>
+        {% if data %}
+
     {% for i in 0..data|length-1 %}
 
     <tr><td>{{ data[i].day|date("d-m-Y") }}</td><td>{{ data[i].regionName }}</td><td>{{ data[i].undelivered ~ '%' }}</td></tr>
 
     {% endfor %}
 
+        {% endif %}
 
 </table>
+
+<form method="POST">
+
+<button name="make">Сформировать</button>
+
+</form>
 
 </html>
