@@ -19,6 +19,29 @@ class SmsStatRepository extends ServiceEntityRepository
         parent::__construct($registry, SmsStat::class);
     }
 
+    public function clearTable(){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'TRUNCATE `sms`.`sms_stat`';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+    }
+
+    public function selectFromMax($start){
+
+        $qd = $this
+            ->createQueryBuilder('p')
+            ->where('p.id > :start')
+            ->setParameter('start', $start)
+            ->getQuery()
+        ;
+        return $qd->execute();
+
+    }
+
     // /**
     //  * @return SmsStat[] Returns an array of SmsStat objects
     //  */
