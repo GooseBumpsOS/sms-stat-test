@@ -53,7 +53,7 @@ class TableController extends AbstractController
 
         for($i=0; $i<count($rawData); $i++)
         $arrayOfDate[] =  $smsStatem->find($i+1)->getDay();
-        $arrayOfDate = array_unique($arrayOfDate);
+        $arrayOfDate =array_values(array_unique($arrayOfDate));
 
 
         for($i=0; $i<count($arrayOfDate); $i++)
@@ -80,16 +80,17 @@ class TableController extends AbstractController
 
         }
         $this->getDoctrine()->getManager()->flush();
+
 //        return $this->render('dump.html.twig', [
 //
-//           'var' => $different
+//           'var' => $arrayOfDate
 //
 //        ]);
 
 
         if ($request->request->has('make')){
 
-            $data = $smsStatem->selectFromMax(count($numberToName)+1);
+            $data = $smsStatem->selectFromMax(count($rawData));
 
             return $this->render('table/index.html.twig', [
                 'data' => $data,
