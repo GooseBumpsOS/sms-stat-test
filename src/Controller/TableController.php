@@ -56,14 +56,14 @@ class TableController extends AbstractController
         $arrayOfDate =array_values(array_unique($arrayOfDate));
 
 
-        for($i=0; $i<count($arrayOfDate); $i++)
+        for($i=0; $i<count($arrayOfDate); $i++) //2
         {
-           for($c=0; $c<count($numberToName);$c++)
+           for($c=0; $c<count($numberToName);$c++) //2
            {
                $data = new SmsStat();
-
-               $different = count($smsStatem->findBy(['region_name' => $numberToName[$c], 'undelivered' => 1]) ) / count($smsStatem->findBy(['region_name' => $numberToName[$c]]) );
-
+if(!count($smsStatem->findBy(['region_name' => $numberToName[$c], 'day' => $arrayOfDate[$i]]) )){               $data->setUndelivered(0);}else {
+    $different = count($smsStatem->findBy(['region_name' => $numberToName[$c], 'undelivered' => 1, 'day' => $arrayOfDate[$i]])) / count($smsStatem->findBy(['region_name' => $numberToName[$c], 'day' => $arrayOfDate[$i]])); // 0,}
+}
                $data->setRegionName($numberToName[$c]);
                $data->setDay($arrayOfDate[$i]);
                $data->setUndelivered($different * 100);
